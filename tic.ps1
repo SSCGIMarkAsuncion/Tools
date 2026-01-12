@@ -162,6 +162,7 @@ switch ($action) {
     }
     default {
         Write-Host "Invalid Action"
+        help
         exit 1
     }
 }
