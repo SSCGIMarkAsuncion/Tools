@@ -9,7 +9,8 @@ $options=@{}
 $actions=@(
     "create",
     "delete",
-    "cd"
+    "cd",
+    "name"
 )
 
 function get_action() {
@@ -83,6 +84,7 @@ function help() {
     Write-Host "  create            Creates a directory for the <Ticket>"
     Write-Host "  delete            Deletes a directory for the <Ticket>"
     Write-Host "  cd                cd to <Ticket>, if <Ticket> does not exist cd to ${TicketsRoot}"
+    Write-Host "  name              formats <Ticket> to dev_I360_US<Ticket> and writes to stdout"
     Write-Host ""
     Write-Host "Options:"
     Write-Host "  -h, --help        Print this help message and exit"
@@ -109,6 +111,14 @@ function create_name() {
 }
 
 switch ($action) {
+    "name" {
+        if ($ticket.Length -eq 0) {
+            Write-Host "<Ticket> cannot be empty"
+            exit 1
+        }
+
+        Write-Output "dev_I360_US${ticket}"
+    }
     "create" {
         if ($ticket.Length -eq 0) {
             Write-Host "<Ticket> cannot be empty"
