@@ -131,6 +131,7 @@ switch ($action) {
         }
 
         New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\" -ItemType Directory
+        Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
         if ($options["mop"] -eq $true) {
             New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\MOP" -ItemType Directory && `
                 Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${ticket}${s_mop}\MOP\$(create_name "MOP").docx"
