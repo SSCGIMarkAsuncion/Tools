@@ -131,10 +131,11 @@ switch ($action) {
         }
 
         New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\" -ItemType Directory
-        Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
+        # Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
+        (Get-Content -Path "${TemplatesRoot}\rca.md") -replace "<datenow>", $(date -Format "yyyy/MM/dd") -replace "<replaceme>", "${ticket}" | Set-Content -Path "${TicketsRoot}\${ticket}${s_mop}\rca.md"
         if ($options["mop"] -eq $true) {
             New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\MOP" -ItemType Directory && `
-                Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${ticket}${s_mop}\MOP\$(create_name "MOP").docx"
+                Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${ticket}${s_mop}\MOP\$(create_name "MOP_$ticket").docx"
 
             New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\Scripts" -ItemType Directory
         }
