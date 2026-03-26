@@ -63,6 +63,10 @@ function rm_unt()
     }
 }
 
+function unique() {
+    $input | python "D:\repos\tools\unique.py"
+}
+
 function usage() {
     Write-Output "Commands:"
     Write-Output "  usage                           prints this message"
@@ -73,6 +77,9 @@ function usage() {
     Write-Output "  upd_web_cfg                     Update web.config paths of current `Integral360PBB` project"
     Write-Output "  cb                              Common codes"
     Write-Output "  rm_unt                          rm untracked files"
+    Write-Output "  unique                          Prints the unique lines. Pipe the input"
+    Write-Output "How to Link file/folder:"
+    Write-Output '    New-Item -ItemType SymbolicLink -Target <target-path> -Path <destination-path>'
 
 }
 
