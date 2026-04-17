@@ -43,7 +43,8 @@ function cdi3()
 
 function i3log()
 {
-    nvim D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log
+    $t = $args[0] ?? 50
+    Get-Content "D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log" -tail $t –wait
 }
 
 oh-my-posh init pwsh --eval --config '~/robbyrussell.omp.json' | Invoke-Expression
@@ -67,6 +68,12 @@ function unique() {
     $input | python "D:\repos\tools\unique.py"
 }
 
+function rwinnat() {
+    net stop winnat
+    Start-Sleep .5
+    net start winnat
+}
+
 function usage() {
     Write-Output "Commands:"
     Write-Output "  usage                           prints this message"
@@ -78,6 +85,7 @@ function usage() {
     Write-Output "  cb                              Common codes"
     Write-Output "  rm_unt                          rm untracked files"
     Write-Output "  unique                          Prints the unique lines. Pipe the input"
+    Write-Output "  rwinnat                         Restarts winnat. Useful for when IIS cannot bind to a port for no fucking reason!!!"
     Write-Output "How to Link file/folder:"
     Write-Output '    New-Item -ItemType SymbolicLink -Target <target-path> -Path <destination-path>'
 
