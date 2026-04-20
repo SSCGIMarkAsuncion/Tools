@@ -4,6 +4,7 @@ $TemplatesRoot = "D:\tools\templates"
 $help=$false
 $action=""
 $ticket=""
+$rargs=@{}
 $options=@{}
 
 $actions=@(
@@ -47,6 +48,7 @@ function get_action() {
     return $action_idx
 }
 
+$arg_i=0
 foreach ($arg in $args) {
     if ($arg[0] -eq "-") {
         if ($arg -eq "-h" -or $arg -eq "--help") {
@@ -62,7 +64,12 @@ foreach ($arg in $args) {
     }
     else {
         if ($action.Length -gt 0) {
-            $ticket = $arg
+            if ($ticket.Length -gt 0) {
+                $rargs=$args[$arg_i..($args.Count-1)]
+            }
+            else {
+                $ticket = $arg
+            }
         }
         else {
             $idx = $(get_action $arg)
@@ -74,17 +81,18 @@ foreach ($arg in $args) {
             }
         }
     }
+    $arg_i++;
 }
 
 function help() {
     Write-Host "Usage:"
-    Write-Host "tic [Action] [Options] <Ticket>"
+    Write-Host "tic [Action] [Options] <Ticket> [arg/s]"
     Write-Host ""
     Write-Host "Actions:"
     Write-Host "  create            Creates a directory for the <Ticket>"
     Write-Host "  delete            Deletes a directory for the <Ticket>"
     Write-Host "  cd                cd to <Ticket>, if <Ticket> does not exist cd to ${TicketsRoot}"
-    Write-Host "  name              formats <Ticket> to dev_I360_US<Ticket> and writes to stdout"
+    Write-Host "  name [arg/s]     formats <Ticket> to I360_US<Ticket>[_arg/s] and writes to stdout"
     Write-Host ""
     Write-Host "Options:"
     Write-Host "  -h, --help        Print this help message and exit"
@@ -117,7 +125,12 @@ switch ($action) {
             exit 1
         }
 
-        Write-Output "dev_I360_US${ticket}"
+        $suffix=""
+        if ($rargs.Count -gt 0) {
+            $suffix=($rargs -join "")
+            $suffix = "_${suffix}"
+        }
+        Write-Output "I360_US${ticket}${suffix}"
     }
     "create" {
         if ($ticket.Length -eq 0) {
