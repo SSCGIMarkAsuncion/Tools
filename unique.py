@@ -8,5 +8,5 @@ while l:
   m[l.strip()] = 1
   l = sys.stdin.readline()
 
-for k in m.keys():
+for k in sorted(m.keys()):
   print(k)
