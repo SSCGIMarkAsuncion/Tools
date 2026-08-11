@@ -1,6 +1,7 @@
 $TicketsRoot = "D:\Tickets\Tasks\"
 # from obsidian template dir
 $TemplatesRoot = "D:\Tickets\Templates\"
+$Name = "MAASUNCION"
 
 $help=$false
 $action=""
@@ -112,10 +113,10 @@ function create_name() {
     )
 
     if ($ticket.Length -gt 0) {
-        return "${prefix}_US${ticket}_SSCGII360_MAASUNCION_$(Get-Date -UFormat "%Y%m%d")"
+        return "${prefix}_US${ticket}_SSCGII360_${Name}_$(Get-Date -UFormat "%Y%m%d")"
     }
     else {
-        return "${prefix}_SSCGII360_MAASUNCION_$(Get-Date -UFormat "%Y%m%d")"
+        return "${prefix}_SSCGII360_${Name}_$(Get-Date -UFormat "%Y%m%d")"
     }
 }
 
@@ -182,7 +183,8 @@ switch ($action) {
                 Set-Location $folder.FullName
             }
             else {
-                Set-Location $TicketsRoot
+                Write-Error "${ticket} does not exists."
+                exit 1
             }
         }
     }
