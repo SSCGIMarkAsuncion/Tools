@@ -1,3 +1,9 @@
+# Import-Module PSReadLine
+#
+# Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
+# Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+# Set-PSReadLineOption -PredictionViewStyle ListView
+
 function clean-i3()
 {
     $proj = $args[0]
@@ -31,8 +37,8 @@ function clean-i3()
 
 function upd_web_cfg()
 {
-    $path=$(pwd).Path
-    $old = [regex]::Escape('C:\Users\maasuncion\source\repos\Integral360PBB')
+    $path=$(Split-Path -Path $pwd -Leaf)
+    $old = [regex]::Escape('Integral360PBB')
     (Get-Content -Path "AMLLITE.Web/Web.config") -replace $old, $path | Set-Content -Path "AMLLITE.Web/Web.config"
 }
 
@@ -43,13 +49,14 @@ function cdi3()
 
 function i3log()
 {
-    $t = $args[0] ?? 50
-    Get-Content "D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log" -tail $t –wait
+    $t = $args[0] ?? 100
+    Get-Content "D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log" -tail $t ΓÇôwait
 }
 
 oh-my-posh init pwsh --eval --config '~/robbyrussell.omp.json' | Invoke-Expression
 $env:GITBIN='C:\Users\maasuncion\AppData\Local\Programs\Git\usr\bin'
 Set-Alias vim "C:\Users\maasuncion\AppData\Local\Programs\Git\usr\bin\vim.exe"
+Set-Alias yazi "D:\tools\yazi-x86_64-pc-windows-msvc\yazi.exe"
 
 $env:OneDrive = 'D:\OneDrive - Systems and Software Consulting Group, Inc\'
 
@@ -74,6 +81,13 @@ function rwinnat() {
     net start winnat
 }
 
+# function copilot-init()
+# {
+#     New-Item -ItemType SymbolicLink -Target "C:\Users\maasuncion\source\repos\Integral360PBB\.github" -Path "C:\Users\maasuncion\source\repos\Integral360PBB2\.github"
+#     New-Item -ItemType SymbolicLink -Target "C:\Users\maasuncion\source\repos\Integral360PBB\.github" -Path "C:\Users\maasuncion\source\repos\Integral360PBB3\.github"
+#     New-Item -ItemType SymbolicLink -Target "C:\Users\maasuncion\source\repos\Integral360PBB\.github" -Path "C:\Users\maasuncion\source\repos\merge\.github"
+# }
+
 function usage() {
     Write-Output "Commands:"
     Write-Output "  usage                           prints this message"
@@ -86,8 +100,12 @@ function usage() {
     Write-Output "  rm_unt                          rm untracked files"
     Write-Output "  unique                          Prints the unique lines. Pipe the input"
     Write-Output "  rwinnat                         Restarts winnat. Useful for when IIS cannot bind to a port for no fucking reason!!!"
+    # Write-Output "  copilot-init                    Make the .gitbub/ symlinks cause for some reason it always gets deleted by an unknown fucking program!!!. Needs admin rights"
     Write-Output "How to Link file/folder:"
     Write-Output '    New-Item -ItemType SymbolicLink -Target <target-path> -Path <destination-path>'
+    Write-Output 'Powershell bypass:'
+    Write-Output '    Set-ExecutionPolicy -ExecutionPolicy Bypass'
+
 
 }
 
