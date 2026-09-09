@@ -100,6 +100,10 @@ function _sql_exec() {
             _sql_exec -DirPath $fullPath
             continue
         }
+        if ([System.IO.Path]::GetExtension($f.Name) -ne ".sql") {
+            Write-Host "Skipping ${fullPath} not a sql file."
+            continue
+        }
 
         $content = $(Get-Content -Raw $fullPath)
         $connectionString = $config.$profile
