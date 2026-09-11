@@ -19,9 +19,9 @@ function help() {
     Write-Host "sql_exec <Profile> [Options] <Path>"
     Write-Host ""
     Write-Host "Profile:"
-    Write-Host "    Local"
-    Write-Host "    DevHci"
-    Write-Host "    UatHci"
+    foreach ($key in $config.PSObject.Properties.Name) {
+        Write-Host "    ${key}"
+    }
     Write-Host "Options:"
     Write-Host "  -h, --help                          Print this help message and exit"
     Write-Host "  -g, --glob <v>                      Filter <Path> with <v> glob."
