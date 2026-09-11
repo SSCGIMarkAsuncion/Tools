@@ -12,8 +12,7 @@ $recursive=$false
 $glob="*"
 $profile=""
 $path=""
-
-$application_name="Powershell-SqlExecutor"
+$customProfile=""
 
 function help() {
     Write-Host "Usage:"
@@ -24,10 +23,11 @@ function help() {
     Write-Host "    DevHci"
     Write-Host "    UatHci"
     Write-Host "Options:"
-    Write-Host "  -h, --help        Print this help message and exit"
-    Write-Host "  -g, --glob <v>    Filter <Path> with <v> glob."
-    Write-Host "  -v, --verbose     Pass '--verbose' to 'Invoke-Sqlcmd'"
-    Write-Host "  -r, --recursive   Execute sql scripts inside a subfolder of the <Path>"
+    Write-Host "  -h, --help                          Print this help message and exit"
+    Write-Host "  -g, --glob <v>                      Filter <Path> with <v> glob."
+    Write-Host "  -v, --verbose                       Pass '--verbose' to 'Invoke-Sqlcmd'"
+    Write-Host "  -r, --recursive                     Execute sql scripts inside a subfolder of the <Path>"
+    Write-Host "  -c, --custom-profile <con_str>      Create a profile with name 'Custom' and with value of <con_str>. NOTE: the <Profile> must be set to 'Custom'."
     Write-Host "NOTE:"
     Write-Host "    This script requires the module 'SqlServer'"
 }
@@ -47,6 +47,10 @@ for ($i = 0; $i -lt $args.Count; $i++) {
         }
         elseif ($arg -eq "-r" -or $arg -eq "--recursive") {
             $recursive = $true
+        }
+        elseif ($arg -eq "-c" -or $arg -eq "--custom-profile") {
+            $customProfile = $args[$i+1]
+            $i++
         }
         else {
             Write-Host "Invalid Option $arg"
@@ -89,6 +93,15 @@ if (-not $(Test-Path -Path $path -PathType Container)) {
     exit 1
 }
 
+$connectionString = ""
+if ($profile -eq "Custom") {
+    $connectionString = $customProfile
+}
+else {
+    $connectionString = $config.$profile
+}
+Write-Host "Using connection string: ${connectionString}"
+
 function _sql_exec() {
     param (
         [string]$DirPath
@@ -106,7 +119,6 @@ function _sql_exec() {
         }
 
         $content = $(Get-Content -Raw $fullPath)
-        $connectionString = $config.$profile
         if ($connectionString.Length -eq 0) {
             Write-Host "${profile} is not a valid Profile. Check ${config_path} for the profiles."
             break
