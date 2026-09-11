@@ -119,7 +119,11 @@ function _sql_exec() {
         }
 
         $content = $(Get-Content -Raw $fullPath)
-        if ($connectionString.Length -eq 0) {
+        if ($profile -eq "Custom" -and $connectionString.Length -eq 0) {
+            Write-Host "${profile} value is empty."
+            break
+        }
+        elseif ($connectionString.Length -eq 0) {
             Write-Host "${profile} is not a valid Profile. Check ${config_path} for the profiles."
             break
         }
@@ -139,7 +143,7 @@ function _sql_exec() {
 
         Invoke-Sqlcmd @params
 
-        Write-Host "Done executing '${fullPath}'. Invoke-Sqlcmd exited with status ${?}"
+        Write-Host "Done executing '${fullPath}'. Invoke-Sqlcmd exited with status ${LASTEXITCODE}"
         Write-Host "===================="
     }
 }

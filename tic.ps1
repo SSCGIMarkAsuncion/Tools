@@ -50,14 +50,18 @@ function get_action() {
     return $action_idx
 }
 
-$arg_i=0
-foreach ($arg in $args) {
+for ($i = 0; $i -lt $args.Count; $i++) {
+    $arg = $args[$i]
     if ($arg[0] -eq "-") {
         if ($arg -eq "-h" -or $arg -eq "--help") {
             $help=$true
         }
         elseif ($arg -eq "-m" -or $arg -eq "--mop") {
             $options["mop"] = $true
+        }
+        elseif ($arg -eq "-d" -or $arg -eq "--description") {
+            $options["description"] = $args[$i+1]
+            $i++
         }
         else {
             Write-Host "Invalid Option $arg"
@@ -67,7 +71,7 @@ foreach ($arg in $args) {
     else {
         if ($action.Length -gt 0) {
             if ($ticket.Length -gt 0) {
-                $rargs=$args[$arg_i..($args.Count-1)]
+                $rargs=$args[$i..($args.Count-1)]
             }
             else {
                 $ticket = $arg
@@ -83,22 +87,22 @@ foreach ($arg in $args) {
             }
         }
     }
-    $arg_i++;
 }
 
 function help() {
     Write-Host "Usage:"
-    Write-Host "tic [Action] [Options] <Ticket> [arg/s]"
+    Write-Host "tic <Action> [Options] <Ticket>"
     Write-Host ""
     Write-Host "Actions:"
     Write-Host "  create            Creates a directory for the <Ticket>"
     Write-Host "  delete            Deletes a directory for the <Ticket>"
     Write-Host "  cd                cd to <Ticket>, if <Ticket> does not exist cd to ${TicketsRoot}"
-    Write-Host "  name [arg/s]     formats <Ticket> to I360_US<Ticket>[_arg/s] and writes to stdout"
+    # Write-Host "  name [arg/s]     formats <Ticket> to I360_US<Ticket>[_arg/s] and writes to stdout"
     Write-Host ""
     Write-Host "Options:"
-    Write-Host "  -h, --help        Print this help message and exit"
-    Write-Host "  -m, --mop         Append `_MOP` to <Ticket> also creates a MOP and Scripts Folder"
+    Write-Host "  -h, --help                    Print this help message and exit"
+    Write-Host "  -m, --mop                     Append `_MOP` to <Ticket> also creates a MOP and Scripts Folder"
+    Write-Host "  -d, --description <desc>      Append ` - <desc>` to <Ticket>"
 }
 
 if ($help -eq $true) {
@@ -121,19 +125,19 @@ function create_name() {
 }
 
 switch ($action) {
-    "name" {
-        if ($ticket.Length -eq 0) {
-            Write-Host "<Ticket> cannot be empty"
-            exit 1
-        }
-
-        $suffix=""
-        if ($rargs.Count -gt 0) {
-            $suffix=($rargs -join "")
-            $suffix = "_${suffix}"
-        }
-        Write-Output "I360_US${ticket}${suffix}"
-    }
+    # "name" {
+    #     if ($ticket.Length -eq 0) {
+    #         Write-Host "<Ticket> cannot be empty"
+    #         exit 1
+    #     }
+    #
+    #     $suffix=""
+    #     if ($rargs.Count -gt 0) {
+    #         $suffix=($rargs -join "")
+    #         $suffix = "_${suffix}"
+    #     }
+    #     Write-Output "I360_US${ticket}${suffix}"
+    # }
     "create" {
         if ($ticket.Length -eq 0) {
             Write-Host "<Ticket> cannot be empty"
@@ -144,8 +148,14 @@ switch ($action) {
         if ($options["mop"] -eq $true) {
             $s_mop = "_MOP"
         }
+        $description=""
+        if ($options["description"].Length -gt 0) {
+            $desc_str = $options["description"];
+            $description = " - ${desc_str}";
+        }
 
-        New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\" -ItemType Directory
+        # Write-Host "Creating ${TicketsRoot}\${ticket}${s_mop}${description}\"
+        New-Item -Path "${TicketsRoot}\${ticket}${s_mop}${description}\" -ItemType Directory
         # Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
         (Get-Content -Path "${TemplatesRoot}\rca.md") -replace "{{date:YYYY/MM/DD}}", $(Get-Date -Format "yyyy/MM/dd") -replace "{{title}}", "${ticket}" | Set-Content -Path "${TicketsRoot}\${ticket}${s_mop}\${ticket}.md"
         if ($options["mop"] -eq $true) {
