@@ -155,12 +155,13 @@ switch ($action) {
         }
 
         # Write-Host "Creating ${TicketsRoot}\${ticket}${s_mop}${description}\"
-        New-Item -Path "${TicketsRoot}\${ticket}${s_mop}${description}\" -ItemType Directory
+        $dir_name = "${ticket}${s_mop}${description}"
+        New-Item -Path "${TicketsRoot}\${dir_name}\" -ItemType Directory
         # Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
-        (Get-Content -Path "${TemplatesRoot}\rca.md") -replace "{{date:YYYY/MM/DD}}", $(Get-Date -Format "yyyy/MM/dd") -replace "{{title}}", "${ticket}" | Set-Content -Path "${TicketsRoot}\${ticket}${s_mop}\${ticket}.md"
+        (Get-Content -Path "${TemplatesRoot}\rca.md") -replace "{{date:YYYY/MM/DD}}", $(Get-Date -Format "yyyy/MM/dd") -replace "{{title}}", "${ticket}" | Set-Content -Path "${TicketsRoot}\${dir_name}\${ticket}.md"
         if ($options["mop"] -eq $true) {
             New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\MOP" -ItemType Directory && `
-                Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${ticket}${s_mop}\MOP\$(create_name "MOP_$ticket").docx"
+                Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${dir_name}\MOP\$(create_name "MOP_$ticket").docx"
 
             New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\Scripts" -ItemType Directory
         }
