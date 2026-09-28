@@ -160,10 +160,10 @@ switch ($action) {
         # Copy-Item -Path "${TemplatesRoot}\rca.md" "${TicketsRoot}\${ticket}${s_mop}\"
         (Get-Content -Path "${TemplatesRoot}\rca.md") -replace "{{date:YYYY/MM/DD}}", $(Get-Date -Format "yyyy/MM/dd") -replace "{{title}}", "${ticket}" | Set-Content -Path "${TicketsRoot}\${dir_name}\${ticket}.md"
         if ($options["mop"] -eq $true) {
-            New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\MOP" -ItemType Directory && `
+            New-Item -Path "${TicketsRoot}\${dir_name}\MOP" -ItemType Directory && `
                 Copy-Item "${TemplatesRoot}\MOP.docx" "${TicketsRoot}\${dir_name}\MOP\$(create_name "MOP_$ticket").docx"
 
-            New-Item -Path "${TicketsRoot}\${ticket}${s_mop}\Scripts" -ItemType Directory
+            New-Item -Path "${TicketsRoot}\${dir_name}\Scripts" -ItemType Directory
         }
     }
     "delete" {
