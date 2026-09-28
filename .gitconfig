@@ -1,0 +1,41 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Mark Anthony Asuncion
+	email = <replace_me_email>
+[core]
+	editor = nvim
+[mergetool "nvimdiff"]
+	layout = "LOCAL,REMOTE / MERGED"
+[merge]
+	tool = nvimdiff
+	conflictStyle = zdiff3
+[mergetool "nvim"]
+	prompt = false
+[diff]
+	algorithm = histogram
+[alias]
+	mm = merge --no-ff --no-commit
+	ma = merge --abort
+	l = log --pretty=ol
+	lf = log --first-parent
+	df = diff --cached
+	bc = branch --show-current
+	pu = push -u origin
+	files = show --name-only --pretty=
+	s = status
+    c = checkout
+	r = restore
+	cp = cherry-pick
+    cpc = cherry-pick --continue
+    cpa = cherry-pick --abort
+	cmne = commit --amend --no-edit
+	puf = push -u --force-with-lease origin
+[pretty]
+	ol = format:%C(brightyellow)%h %Creset<a: %<(20,trunc)%C(cyan)%ae %C(brightmagenta)%ai%Creset> [%<(50,trunc)%s] %Cgreen[p: %p]%C(auto)%d
+	oneline = %Cred%h %Cgreen[Parent/s %p] %Creset%an <%ae> %Cblue%ah %Creset%d
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
