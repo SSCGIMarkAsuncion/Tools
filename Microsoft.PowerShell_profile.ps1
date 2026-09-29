@@ -50,7 +50,12 @@ function cdi3()
 function i3log()
 {
     $t = $args[0] ?? 100
-    Get-Content "D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log" -tail $t ΓÇôwait
+    Get-Content "D:\Projects\AML\I360\Integral360PBB\AMLLITE.Web\logs\i360.log" -tail $t –wait
+}
+
+function pr()
+{
+    az repos pr create ${args}
 }
 
 oh-my-posh init pwsh --eval --config '~/robbyrussell.omp.json' | Invoke-Expression
@@ -59,6 +64,16 @@ Set-Alias vim "C:\Users\maasuncion\AppData\Local\Programs\Git\usr\bin\vim.exe"
 Set-Alias yazi "D:\tools\yazi-x86_64-pc-windows-msvc\yazi.exe"
 
 $env:OneDrive = 'D:\OneDrive - Systems and Software Consulting Group, Inc\'
+
+function y {
+	$tmp = (New-TemporaryFile).FullName
+	yazi @args --cwd-file="$tmp"
+	$cwd = Get-Content -Path $tmp -Encoding UTF8
+	if ($cwd -and $cwd -ne $PWD.Path -and (Test-Path -LiteralPath $cwd -PathType Container)) {
+		Set-Location -LiteralPath (Resolve-Path -LiteralPath $cwd).Path
+	}
+	Remove-Item -Path $tmp
+}
 
 function rm_unt()
 {
@@ -73,6 +88,10 @@ function rm_unt()
 
 function unique() {
     $input | python "D:\repos\tools\unique.py"
+}
+
+function sql_exec() {
+    D:\repos\tools\sql_exec.ps1 @args
 }
 
 function rwinnat() {
@@ -100,7 +119,8 @@ function usage() {
     Write-Output "  rm_unt                          rm untracked files"
     Write-Output "  unique                          Prints the unique lines. Pipe the input"
     Write-Output "  rwinnat                         Restarts winnat. Useful for when IIS cannot bind to a port for no fucking reason!!!"
-    # Write-Output "  copilot-init                    Make the .gitbub/ symlinks cause for some reason it always gets deleted by an unknown fucking program!!!. Needs admin rights"
+    Write-Output "  copilot-init                    Make the .gitbub/ symlinks cause for some reason it always gets deleted by an unknown fucking program!!!. Needs admin rights"
+    Write-Output "  pr                              Alias = az repos pr create"
     Write-Output "How to Link file/folder:"
     Write-Output '    New-Item -ItemType SymbolicLink -Target <target-path> -Path <destination-path>'
     Write-Output 'Powershell bypass:'
