@@ -17,7 +17,7 @@ jobs:
         run: |
           pwd
           cd ..
-          zip -r ./Tools.zip ./tools/ -x "*.github/*" -x "*.git/*"
+          zip -r ./Tools.zip ./Tools/ -x "*.github/*" -x "*.git/*"
       - name: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
