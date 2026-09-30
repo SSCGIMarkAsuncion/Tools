@@ -23,7 +23,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pwd
-          gh release create "v${{ github.run_number }}" ./Tools.zip \
+          gh release create "v${{ github.run_number }}" ../Tools.zip \
             --target "${{ github.sha }}" \
             --title "Tools v${{ github.run_number }}" \
             --generate-notes
