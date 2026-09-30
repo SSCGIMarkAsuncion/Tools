@@ -15,6 +15,8 @@ jobs:
         uses: actions/checkout@v6.1.0
       - name: zip
         run: |
+          pwd
+          ls -al
           zip -r ./Tools.zip ./Tools/
       - name: release
         env:
