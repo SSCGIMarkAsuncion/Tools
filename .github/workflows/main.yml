@@ -1,0 +1,27 @@
+name: "Zip"
+run-name: "Zip"
+on:
+  push:
+    branches:
+    - master
+permissions:
+  contents: write
+jobs:
+  zip:
+    name: "Zip"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6.1.0
+      - name: zip
+        run: |
+          zip -r ./Tools.zip ./Tools/
+      - name: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ github.run_number }}" ./Tools.zip \
+            --target "${{ github.sha }}" \
+            --title "Tools v${{ github.run_number }}" \
+            --generate-notes
+      
