@@ -15,12 +15,16 @@ jobs:
         uses: actions/checkout@v6.1.0
       - name: zip
         run: |
+          rm -rf .git
+          rm -rf .github
           cd ..
           zip -r ./Tools.zip ./Tools/
       - name: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo $HOME
+          cd ..
           gh release create "v${{ github.run_number }}" ./Tools.zip \
             --target "${{ github.sha }}" \
             --title "Tools v${{ github.run_number }}" \
